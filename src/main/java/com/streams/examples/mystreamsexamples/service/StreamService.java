@@ -2,6 +2,7 @@ package com.streams.examples.mystreamsexamples.service;
 
 import com.streams.examples.mystreamsexamples.beans.Car;
 import com.streams.examples.mystreamsexamples.beans.Person;
+import com.streams.examples.mystreamsexamples.beans.PersonDTO;
 import com.streams.examples.mystreamsexamples.mocks.CarMock;
 import com.streams.examples.mystreamsexamples.mocks.NumberListMock;
 import com.streams.examples.mystreamsexamples.mocks.PersonMock;
@@ -104,7 +105,7 @@ public class StreamService {
     }
 
     public void removingDuplicateData(){
-        System.out.println("Removing duplicate Data");
+        System.out.println("Removing duplicate Data - Create new List with exclusive numbers");
         List<Integer> numbersList = numberListMock.createNumbers();
 
         // Use here Java Streams
@@ -117,7 +118,7 @@ public class StreamService {
     }
 
     public void filteringData(){
-        System.out.println("Filtering Data");
+        System.out.println("Filtering Data - Only cars with price more than 30000.00");
         List<Car> cars = carMock.findCars();
 
         // Use here Java Streams
@@ -125,6 +126,30 @@ public class StreamService {
                 .filter(car -> car.getPrice() > 30000.00)
                 .collect(Collectors.toList());
         listFiltered.forEach(System.out::println);
+
+        System.out.println();
+    }
+
+    public void transformObjectToDTO(){
+        System.out.println("Transforming Data - Class Person to PersonDTO");
+        List<Person> people = personMock.findPerson();
+
+        // Use here Java Streams
+        List<PersonDTO> dtos = people.stream()
+                .map(person -> new PersonDTO(person.getId(),person.getFirstName(),person.getAge()))
+                .collect(Collectors.toList());
+
+        dtos.forEach(System.out::println);
+        System.out.println();
+    }
+
+    public void groupingDataLikeSql(){
+        System.out.println("Grouping Data - Use Class Car and grouping the data");
+        List<Car> cars = carMock.findCars();
+
+        // Use here Java Streams
+        cars.stream().collect(Collectors.groupingBy(Car::getPrice));
+        cars.forEach(System.out::println);
 
         System.out.println();
     }
